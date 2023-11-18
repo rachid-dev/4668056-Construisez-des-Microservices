@@ -5,13 +5,16 @@ import com.ecommerce.micrommerce.web.exceptions.ProduitIntrouvableException;
 import com.ecommerce.micrommerce.web.model.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.*;
 import java.util.List;
+
 
 @Api( "API pour les opérations CRUD sur les produits.")
 @RestController
@@ -61,5 +64,15 @@ public class ProductController {
                 .buildAndExpand(productAdded.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("/AdminProduits")
+    public Map<String, Integer> calculerMargeProduit(){
+        List<Product> products = productDao.findAll();
+        Map<String, Integer> results = new HashMap<String, Integer>();
+        products.forEach(product -> 
+            results.put(product.toString(), product.getPrix() - product.getPrixAchat())
+        );
+        return results; 
     }
 }
