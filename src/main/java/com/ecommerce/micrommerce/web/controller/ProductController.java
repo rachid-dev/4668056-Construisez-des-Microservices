@@ -13,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.*;
-import java.util.List;
 
 
 @Api( "API pour les opérations CRUD sur les produits.")
@@ -73,6 +72,11 @@ public class ProductController {
         products.forEach(product -> 
             results.put(product.toString(), product.getPrix() - product.getPrixAchat())
         );
-        return results; 
+        return results;
+    }
+
+    @GetMapping("/TriProduits")
+    public List<Product> trierProduitsParOrdreAlphabetique(){
+        return productDao.findAllByOrderByNom();
     }
 }
